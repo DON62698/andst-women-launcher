@@ -4,18 +4,50 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>and st women</title>
+
+  <!-- iOS：主畫面圖示 -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <!-- Android / PWA -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS 獨立模式 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}</style>
+
+  <style>
+    html,body{height:100%;margin:0}
+    body{display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;
+         font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    button{padding:12px 20px;border:0;border-radius:10px;font-size:16px;cursor:pointer}
+  </style>
 </head>
 <body>
-  <div>Launching…</div>
+  <img src="apple-touch-icon.png" alt="" width="96" height="96" style="border-radius:20px" />
+  <div>and st women</div>
+  <button id="open">開啟 App</button>
+  <div style="opacity:.7;font-size:14px">要加入主畫面：iPhone 用 Safari 分享→加入主畫面；Android 用 Chrome → 安裝/加入主畫面。</div>
+
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(console.error); }
-    location.replace("https://andstwomenapp-d595d3bv65csfvvnmouf4o.streamlit.app/");
+    const APP_URL = "https://andstwomenapp-d595d3bv65csfvvnmouf4o.streamlit.app/";
+
+    // Android 安裝需要 service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    }
+
+    // 已安裝（桌面捷徑啟動）才自動跳轉
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches || // Android/桌面
+      window.navigator.standalone === true;                      // iOS
+
+    if (isStandalone) {
+      location.replace(APP_URL);
+    } else {
+      document.getElementById('open').addEventListener('click', () => location.href = APP_URL);
+    }
   </script>
 </body>
 </html>
+
