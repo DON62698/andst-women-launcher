@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>and st women</title>
+  <title>and st W’s</title>
 
-  <!-- iOS：主畫面圖示 -->
+  <!-- iOS：主畫面圖示與 App 名稱 -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="and st W’s">
 
   <!-- Android / PWA -->
   <link rel="manifest" href="manifest.json" />
@@ -17,17 +18,59 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <style>
-    html,body{height:100%;margin:0}
-    body{display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;
-         font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    button{padding:12px 20px;border:0;border-radius:10px;font-size:16px;cursor:pointer}
+    :root { --overlay: rgba(0,0,0,.35); }
+    * { box-sizing: border-box; }
+    html,body { height:100%; margin:0; }
+    body {
+      position: relative;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.4);
+    }
+    /* 背景圖（請上傳 bg.jpg 或 bg.png 到同資料夾） */
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background:
+        linear-gradient(var(--overlay), var(--overlay)),
+        url('bg.jpg') center / cover no-repeat fixed;
+      z-index: -1;
+    }
+    /* 若你要用 bg.png，上一行把 'bg.jpg' 換成 'bg.png' 即可 */
+
+    .card {
+      backdrop-filter: blur(6px);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      min-width: 240px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    button {
+      padding: 12px 22px;
+      border: 0; border-radius: 12px;
+      font-size: 16px; font-weight: 600;
+      color: #111; background: #fff; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    }
+    img.logo {
+      width: 96px; height: 96px; border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
   </style>
 </head>
 <body>
-  <img src="apple-touch-icon.png" alt="" width="96" height="96" style="border-radius:20px" />
-  <div>and st women</div>
-  <button id="open">開啟 App</button>
-  <div style="opacity:.7;font-size:14px">要加入主畫面：iPhone 用 Safari 分享→加入主畫面；Android 用 Chrome → 安裝/加入主畫面。</div>
+  <div class="card">
+    <img class="logo" src="apple-touch-icon.png" alt="" />
+    <h1>and st W’s</h1>
+    <button id="open">Start</button>
+  </div>
 
   <script>
     const APP_URL = "https://andstwomenapp-d595d3bv65csfvvnmouf4o.streamlit.app/";
