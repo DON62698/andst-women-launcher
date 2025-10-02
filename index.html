@@ -29,5 +29,55 @@
     }
     /* 背景使用 bg.jpg，維持原色 */
     body::before{
-      content:""; position:
+      content:""; position:fixed; inset:0;
+      background:
+        linear-gradient(var(--overlay), var(--overlay)),
+        url('bg.jpg') center / cover no-repeat fixed;
+      z-index:-1;
+    }
+    .card {
+      backdrop-filter: blur(6px);
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      min-width: 240px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
+    }
+    h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .2px; }
+    button {
+      padding: 12px 22px; border: 0; border-radius: 12px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      color: #111; background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+    img.logo { width: 96px; height: 96px; border-radius: 22px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img class="logo" src="apple-touch-icon.png" alt="" />
+    <h1>and st W’s</h1>
+    <button id="open">Start</button>
+  </div>
 
+  <script>
+    const APP_URL = "https://andstwomenapp-d595d3bv65csfvvnmouf4o.streamlit.app/";
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    }
+
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+
+    if (isStandalone) {
+      location.replace(APP_URL);
+    } else {
+      document.getElementById('open').addEventListener('click', () => location.href = APP_URL);
+    }
+  </script>
+</body>
+</html>
