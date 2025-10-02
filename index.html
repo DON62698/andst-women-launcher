@@ -5,28 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>and st W’s</title>
 
-  <!-- iOS icon（破快取） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5" />
+  <!-- iOS：主畫面圖示（加版本參數避免吃舊快取） -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=4" />
   <meta name="apple-mobile-web-app-title" content="and st W’s">
 
   <!-- Android / PWA -->
-  <link rel="manifest" href="manifest.json?v=5" />
+  <link rel="manifest" href="manifest.json?v=4" />
   <meta name="theme-color" content="#ffffff" />
 
-  <!-- iOS 全螢幕 -->
+  <!-- iOS 全螢幕樣式 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-  <!-- 預先載入背景 -->
-  <link rel="preload" as="image" href="bg.jpg?v=5" />
+  <!-- 預先載入背景，減少主畫面模式偶發載不到的情況 -->
+  <link rel="preload" as="image" href="bg.jpg?v=4" />
 
   <style>
-    :root {
-      --overlay: rgba(120, 89, 65, 0.02);   /* 幾乎無感的罩色；想完全原色→把 overlay 與下面 linear-gradient 拿掉 */
-      --card-bg: rgba(255,255,255,.72);    /* 卡片底（白、72% 不透明） */
-      --card-border: rgba(0,0,0,.06);      /* 卡片邊框 */
-      --card-shadow: 0 8px 30px rgba(0,0,0,.15);
-    }
+    :root { --overlay: rgba(120, 89, 65, 0.02); } /* 幾乎無感的 2% 罩色；若要完全原色可拿掉 */
     * { box-sizing: border-box; }
     html,body { height:100%; margin:0; }
     body {
@@ -36,29 +31,31 @@
       color: #111;
       text-align: center;
     }
-    /* 背景：bg.jpg（破快取） */
+    /* 背景用 bg.jpg（加 ?v=4 破快取） */
     body::before{
       content:""; position:fixed; inset:0;
       background:
         linear-gradient(var(--overlay), var(--overlay)),
-        url('bg.jpg?v=5') center / cover no-repeat fixed;
+        url('bg.jpg?v=4') center / cover no-repeat fixed;
       z-index:-1;
     }
 
-    /* ▶ 中間四方形卡片（已恢復） */
+    /* 中央區與背景同色（透明） */
     .card {
-      backdrop-filter: blur(6px);
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      box-shadow: var(--card-shadow);
-      border-radius: 16px;
-      padding: 18px 20px;
+      background: transparent; backdrop-filter: none; border: none; box-shadow: none;
+      border-radius: 16px; padding: 18px 20px;
       display: flex; flex-direction: column; align-items: center; gap: 12px;
       min-width: 240px;
     }
 
-    h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .2px; }
-    img.logo { width: 96px; height: 96px; border-radius: 22px; }
+    h1 {
+      margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .2px;
+      text-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+    img.logo {
+      width: 96px; height: 96px; border-radius: 22px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+    }
     button {
       padding: 12px 22px; border: 0; border-radius: 12px;
       font-size: 16px; font-weight: 700; cursor: pointer;
@@ -69,21 +66,23 @@
 </head>
 <body>
   <div class="card">
-    <img class="logo" src="apple-touch-icon.png?v=5" alt="" />
+    <img class="logo" src="apple-touch-icon.png?v=4" alt="" />
     <h1>and st W’s</h1>
     <button id="open">Start</button>
   </div>
 
   <script>
     const APP_URL = "https://andstwomenapp-d595d3bv65csfvvnmouf4o.streamlit.app/";
+
+    // 保留 SW（Android 安裝需要），但不做任何快取重寫
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(console.error);
     }
-    // 只在按下 Start 才前往 APP
+
+    // ✅ 只在按下 Start 才前往 APP。不再自動轉跳（即使是主畫面啟動）。
     document.getElementById('open').addEventListener('click', () => {
       location.href = APP_URL;
     });
   </script>
 </body>
 </html>
-
